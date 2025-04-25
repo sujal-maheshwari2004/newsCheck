@@ -1,1 +1,4 @@
-pytube
+Flask
+yt-dlp
+openai
+python-dotenv
