@@ -2,3 +2,4 @@ Flask
 yt-dlp
 openai
 python-dotenv
+gunicorn
