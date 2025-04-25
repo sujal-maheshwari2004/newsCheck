@@ -2,16 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Summary Generator</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <h1>YouTube Summary Generator</h1>
-    <form action="/process" method="post">
+
+    {% if error %}
+        <p style="color: red; text-align: center;">{{ error }}</p>
+    {% endif %}
+
+    <form action="/" method="post">
         <label for="youtube_link">Enter YouTube Link:</label>
         <input type="url" id="youtube_link" name="youtube_link" required>
         <button type="submit">Generate Summary</button>
     </form>
+
+    {% if summary %}
+        <h2 style="text-align:center;">Generated Summary</h2>
+        <div style="max-width: 800px; margin: 0 auto;">
+            <ul>
+                {% for point in summary %}
+                    <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </body>
 </html>
