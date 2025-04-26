@@ -73,7 +73,7 @@ export default function App() {
       
       <h1 className='text-foreground text-3xl font-semibold text-center'>News Check</h1>
 
-      <p className='text-muted-foreground text-md text-center m-4 w-[90%] md:max-w-[80%] lg:max-w-[50%]'>Lorem Ipsum dolor sit amet lorem duro wingarium leviosar Lorem Ipsum dolor sit amet lorem duro wingarium leviosar Lorem Ipsum dolor sit amet lorem duro wingarium leviosar</p>
+      <p className='text-muted-foreground text-md text-center m-4 w-[90%] md:max-w-[80%] lg:max-w-[50%]'>Hours of news in a matter of lines</p>
 
       <input
         className='bg-background border-border border rounded-md text-foreground placeholder-muted-foreground p-3 mt-7 mb-7 w-[90%] md:max-w-[70%] lg:max-w-[40%]'
