@@ -1,0 +1,6 @@
+fastapi
+pydantic
+yt-dlp
+openai
+python-dotenv
+gunicorn
