@@ -16,7 +16,7 @@ def download_audio(link, output_format='wav', output_template='%(title)s.%(ext)s
         'outtmpl': output_template,
         'quiet': False,
         'noplaylist': True,
-        'cookiefile' : '../cookies.txt',
+        'cookiefile' : '/home/ubuntu/newsCheck/backend/cookies.txt',
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
