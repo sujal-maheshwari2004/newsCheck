@@ -21,6 +21,10 @@ def clean_temp_folder():
     if os.path.exists(TEMP_FOLDER):
         shutil.rmtree(TEMP_FOLDER)
 
+    # also remove cookies file after request
+    if os.path.exists("cookies.txt"):
+        os.remove("cookies.txt")
+
 
 def ensure_cookie_file():
     """
@@ -29,8 +33,13 @@ def ensure_cookie_file():
     cookies = os.getenv("YOUTUBE_COOKIES")
 
     if cookies:
+        print("Creating cookies.txt for yt-dlp")
+
         with open("cookies.txt", "w") as f:
             f.write(cookies)
+
+    else:
+        print("No YOUTUBE_COOKIES env variable found")
 
 
 def process_youtube_link(youtube_link):
@@ -57,6 +66,9 @@ def process_youtube_link(youtube_link):
 
         audio_path = os.path.join(TEMP_FOLDER, "downloaded_audio.wav")
 
+        if not os.path.exists(audio_path):
+            raise FileNotFoundError("Audio download failed")
+
         transcript_path = os.path.join(TEMP_FOLDER, "transcript.txt")
 
         api_key = os.getenv("OPENAI_API_KEY")
@@ -72,6 +84,9 @@ def process_youtube_link(youtube_link):
             audio_path=audio_path,
             output_path=transcript_path
         )
+
+        if not os.path.exists(transcript_path):
+            raise FileNotFoundError("Transcript generation failed")
 
         # Step 3 Summarization
         summary_path = os.path.join(TEMP_FOLDER, "news_summary.txt")
