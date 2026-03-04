@@ -1,16 +1,19 @@
 import { useState } from 'react';
 
 export default function App() {
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [youtubeLink, setYoutubeLink] = useState('');
   const [submitClicked, setSubmitClicked] = useState(false);
   const [summaryPoints, setSummaryPoints] = useState([]);
 
   async function submitYtLink() {
-    setSubmitClicked(true)
+    setSubmitClicked(true);
 
     try {
 
-      let res = await fetch('/process/', {
+      let res = await fetch(`${API_URL}/process/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,7 +25,7 @@ export default function App() {
 
       if(!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.detail || 'Something went wrong.')
+        throw new Error(errorData.detail || 'Something went wrong.');
       }
 
       const data = await res.json();
@@ -34,10 +37,11 @@ export default function App() {
     } catch(err) {
       console.log(err);
       alert(err);
+      setSubmitClicked(false);
     }
   }
 
-  async function resetContent() {
+  function resetContent() {
     setYoutubeLink('');
     setSubmitClicked(false);
     setSummaryPoints([]);
@@ -52,7 +56,9 @@ export default function App() {
         {
           summaryPoints.map((i, ind) => {
             return (
-              <li className={`${ind==0?'':'mt-6'} md:text-lg text-muted-foreground`}>{i}</li>
+              <li key={ind} className={`${ind==0?'':'mt-6'} md:text-lg text-muted-foreground`}>
+                {i}
+              </li>
             );
           })
         }
@@ -73,7 +79,9 @@ export default function App() {
       
       <h1 className='text-foreground text-3xl font-semibold text-center'>News Check</h1>
 
-      <p className='text-muted-foreground text-md text-center m-4 w-[90%] md:max-w-[80%] lg:max-w-[50%]'>Hours of news in a matter of lines</p>
+      <p className='text-muted-foreground text-md text-center m-4 w-[90%] md:max-w-[80%] lg:max-w-[50%]'>
+        Hours of news in a matter of lines
+      </p>
 
       <input
         className='bg-background border-border border rounded-md text-foreground placeholder-muted-foreground p-3 mt-7 mb-7 w-[90%] md:max-w-[70%] lg:max-w-[40%]'
