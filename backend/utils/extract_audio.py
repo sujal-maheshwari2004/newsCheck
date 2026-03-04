@@ -1,14 +1,10 @@
 import yt_dlp
+import os
 
 
-def download_audio(link, output_format='wav', output_template='%(title)s.%(ext)s'):
+def download_audio(link, output_format="wav", output_template="%(title)s.%(ext)s"):
     """
-    Downloads audio from a YouTube link.
-
-    Args:
-        link (str): The YouTube video URL.
-        output_format (str): Desired audio format.
-        output_template (str): Output file naming template.
+    Downloads audio from a YouTube link and returns the downloaded file path.
     """
 
     ydl_opts = {
@@ -16,9 +12,6 @@ def download_audio(link, output_format='wav', output_template='%(title)s.%(ext)s
         "outtmpl": output_template,
         "noplaylist": True,
         "quiet": True,
-
-        # cookies help bypass some youtube restrictions
-        "cookiefile": "cookies.txt",
 
         # retry logic
         "retries": 10,
@@ -34,7 +27,7 @@ def download_audio(link, output_format='wav', output_template='%(title)s.%(ext)s
 
         # browser-like request headers
         "http_headers": {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         },
 
         # extractor tweaks for youtube throttling
@@ -44,7 +37,7 @@ def download_audio(link, output_format='wav', output_template='%(title)s.%(ext)s
             }
         },
 
-        # postprocess audio
+        # convert audio using ffmpeg
         "postprocessors": [{
             "key": "FFmpegExtractAudio",
             "preferredcodec": output_format,
@@ -52,9 +45,25 @@ def download_audio(link, output_format='wav', output_template='%(title)s.%(ext)s
         }],
     }
 
+    # Only use cookies if they exist
+    if os.path.exists("cookies.txt"):
+        ydl_opts["cookiefile"] = "cookies.txt"
+        print("Using cookies.txt for YouTube authentication")
+
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+
+        print("Starting YouTube download...")
+
         info = ydl.extract_info(link, download=True)
-        print(f"Downloaded: {info.get('title', 'Unknown Title')}.{output_format}")
+
+        downloaded_file = ydl.prepare_filename(info)
+
+        # Replace extension if ffmpeg converted it
+        downloaded_file = os.path.splitext(downloaded_file)[0] + f".{output_format}"
+
+        print(f"Downloaded audio: {downloaded_file}")
+
+        return downloaded_file
 
 
 if __name__ == "__main__":
