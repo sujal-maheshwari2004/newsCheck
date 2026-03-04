@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
   ],
   build: {
-    outDir: '../backend/dist',
+    outDir: 'dist',
   },
   server: {
     proxy: {
