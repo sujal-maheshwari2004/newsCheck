@@ -5,10 +5,15 @@ import os
 def download_audio(link, output_format="wav", output_template="%(title)s.%(ext)s"):
     """
     Downloads audio from a YouTube link and returns the downloaded file path.
+
+    Args:
+        link (str): The YouTube video URL
+        output_format (str): Desired audio format (wav/mp3/etc)
+        output_template (str): Output filename template
     """
 
     ydl_opts = {
-        "format": "bestaudio/best",
+        "format": "bestaudio[ext=m4a]/bestaudio/best",
         "outtmpl": output_template,
         "noplaylist": True,
         "quiet": True,
@@ -16,28 +21,29 @@ def download_audio(link, output_format="wav", output_template="%(title)s.%(ext)s
         # retry logic
         "retries": 10,
         "fragment_retries": 10,
-        "skip_unavailable_fragments": True,
 
         # network robustness
         "nocheckcertificate": True,
         "geo_bypass": True,
-
-        # prevent ipv6 issues on cloud hosts
         "source_address": "0.0.0.0",
 
-        # browser-like request headers
+        # reduce bot detection
+        "sleep_interval": 2,
+        "max_sleep_interval": 5,
+
+        # browser-like headers
         "http_headers": {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         },
 
-        # extractor tweaks for youtube throttling
+        # YouTube extractor config
         "extractor_args": {
             "youtube": {
-                "player_client": ["android", "web"]
+                "player_client": ["web"]
             }
         },
 
-        # convert audio using ffmpeg
+        # convert audio with ffmpeg
         "postprocessors": [{
             "key": "FFmpegExtractAudio",
             "preferredcodec": output_format,
@@ -45,23 +51,24 @@ def download_audio(link, output_format="wav", output_template="%(title)s.%(ext)s
         }],
     }
 
-    # Only use cookies if they exist
+    # Use cookies if they exist
     if os.path.exists("cookies.txt"):
         ydl_opts["cookiefile"] = "cookies.txt"
-        print("Using cookies.txt for YouTube authentication")
+        print("Using cookies.txt for authentication")
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
 
-        print("Starting YouTube download...")
+        print("Starting YouTube audio download...")
 
         info = ydl.extract_info(link, download=True)
 
+        # original filename from yt-dlp
         downloaded_file = ydl.prepare_filename(info)
 
-        # Replace extension if ffmpeg converted it
+        # change extension after ffmpeg conversion
         downloaded_file = os.path.splitext(downloaded_file)[0] + f".{output_format}"
 
-        print(f"Downloaded audio: {downloaded_file}")
+        print(f"Downloaded audio file: {downloaded_file}")
 
         return downloaded_file
 
