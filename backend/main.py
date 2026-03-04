@@ -13,7 +13,10 @@ app = FastAPI()
 # CORS CONFIGURATION
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # change to your frontend URL in production
+    allow_origins=[
+        "https://newscheck-frontend.onrender.com",
+        "http://localhost:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -66,4 +69,5 @@ async def process_youtube(youtube_link: YouTubeLink):
 
     return {
         "summary_points": summary_data.get('summary_points', [])
+
     }
