@@ -15,7 +15,7 @@ export default function Verify() {
 
       if (!token) {
         alert("Invalid login link.");
-        window.location.href = "/login";
+        window.location.href = "/";
         return;
       }
 
