@@ -51,7 +51,7 @@ export default function Login() {
       </h1>
 
       <p className='text-muted-foreground text-md text-center m-4 w-[90%] md:max-w-[80%] lg:max-w-[50%]'>
-        Enter your email to receive a login link
+          Enter your email to log in. My API key costs real money and I’d like to keep at least <em>some</em> of it.
       </p>
 
       <input
