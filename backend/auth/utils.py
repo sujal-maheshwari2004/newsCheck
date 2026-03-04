@@ -4,7 +4,7 @@ import secrets
 import os
 from jose import jwt
 
-USERS_FILE = "data/users.json"
+USERS_FILE = os.path.join(os.path.dirname(__file__), "../data/users.json")
 JWT_SECRET = os.getenv("JWT_SECRET", "dev_secret")
 
 LOGIN_TOKENS = {}
