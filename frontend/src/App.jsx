@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Login from './Login';
 
 export default function App() {
 
@@ -7,16 +8,27 @@ export default function App() {
   const [youtubeLink, setYoutubeLink] = useState('');
   const [submitClicked, setSubmitClicked] = useState(false);
   const [summaryPoints, setSummaryPoints] = useState([]);
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      setAuthenticated(true);
+    }
+  }, []);
 
   async function submitYtLink() {
     setSubmitClicked(true);
 
     try {
 
+      const token = localStorage.getItem("auth_token");
+
       let res = await fetch(`${API_URL}/process/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           youtube_link: youtubeLink,
@@ -45,6 +57,11 @@ export default function App() {
     setYoutubeLink('');
     setSubmitClicked(false);
     setSummaryPoints([]);
+  }
+
+  // 🔐 show login page if not authenticated
+  if(!authenticated) {
+    return <Login />;
   }
 
   if(summaryPoints.length > 0) return (
