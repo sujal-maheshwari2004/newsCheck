@@ -23,7 +23,7 @@ app.include_router(auth_router, prefix="/auth")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://newscheck-frontend.onrender.com",
+        "https://newscheck-1.onrender.com",
         "http://localhost:5173"
     ],
     allow_credentials=True,
@@ -90,4 +90,5 @@ async def process_youtube(
 
     return {
         "summary_points": summary_data.get('summary_points', [])
+
     }
