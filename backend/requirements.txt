@@ -5,3 +5,5 @@ openai
 python-dotenv
 gunicorn
 uvicorn
+resend
+python-jose

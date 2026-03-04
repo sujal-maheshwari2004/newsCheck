@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from agent import process_youtube_link
 import os
@@ -8,7 +8,16 @@ import re
 # CORS IMPORT
 from fastapi.middleware.cors import CORSMiddleware
 
+# AUTH IMPORTS
+from auth.router import router as auth_router
+from auth.dependencies import get_current_user
+from auth.utils import check_usage_allowed, record_usage
+
+
 app = FastAPI()
+
+# REGISTER AUTH ROUTES
+app.include_router(auth_router, prefix="/auth")
 
 # CORS CONFIGURATION
 app.add_middleware(
@@ -31,7 +40,10 @@ class YouTubeLink(BaseModel):
 
 
 @app.post("/process/")
-async def process_youtube(youtube_link: YouTubeLink):
+async def process_youtube(
+    youtube_link: YouTubeLink,
+    user=Depends(get_current_user)  # AUTHENTICATED USER
+):
     """
     Endpoint to process a YouTube link and return the summary.
     """
@@ -42,6 +54,12 @@ async def process_youtube(youtube_link: YouTubeLink):
     # Validate YouTube link format
     if not YOUTUBE_URL_PATTERN.match(youtube_link.youtube_link):
         raise HTTPException(status_code=400, detail="Invalid YouTube link format!")
+
+    # CHECK USAGE LIMITS
+    allowed, reason = check_usage_allowed(user)
+
+    if not allowed:
+        raise HTTPException(status_code=429, detail=reason)
 
     # Process the YouTube link
     json_file_path = process_youtube_link(youtube_link.youtube_link)
@@ -67,7 +85,9 @@ async def process_youtube(youtube_link: YouTubeLink):
         if os.path.exists(json_file_path):
             os.remove(json_file_path)
 
+    # RECORD USAGE AFTER SUCCESS
+    record_usage(user)
+
     return {
         "summary_points": summary_data.get('summary_points', [])
-
     }
