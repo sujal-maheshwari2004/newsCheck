@@ -1,0 +1,90 @@
+# ==============================
+# Environment Variables / Secrets
+# ==============================
+
+.env
+.env.*
+*.env
+
+# ==============================
+# Python
+# ==============================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ==============================
+# Node / Frontend
+# ==============================
+
+node_modules/
+
+# Vite build output
+dist/
+frontend/dist/
+
+# package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==============================
+# OS Junk
+# ==============================
+
+.DS_Store
+Thumbs.db
+
+# ==============================
+# IDE / Editor
+# ==============================
+
+.vscode/
+.idea/
+
+# ==============================
+# Runtime Generated Files
+# ==============================
+
+backend/temp/
+backend/news_summary.json
+backend/cookies.txt
+
+# ==============================
+# Logs
+# ==============================
+
+*.log
+
+# ==============================
+# Render build artifacts
+# ==============================
+
+*.tar
+*.xz
+
+# ==============================
+# ffmpeg binaries downloaded in build.sh
+# ==============================
+
+backend/ffmpeg-bin/
+backend/ffmpeg-*-amd64-static/
+
+# ==============================
+# Local data
+# ==============================
+
+backend/data/users_backup.json
