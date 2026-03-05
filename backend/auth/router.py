@@ -51,7 +51,7 @@ async def request_login(data: EmailRequest):
     login_link = f"{frontend}/verify?token={token}"
 
     resend.Emails.send({
-        "from": "NewsCheck <onboarding@resend.dev>",
+        "from": "NewsCheck <newscheck.admin@sujalmaheshwari.com>",
         "to": email,
         "subject": "Your NewsCheck login link",
         "html": f"""
