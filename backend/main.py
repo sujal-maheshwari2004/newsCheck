@@ -92,3 +92,10 @@ async def process_youtube(
         "summary_points": summary_data.get('summary_points', [])
 
     }
+
+@app.get("/health")
+async def health_check():
+    """
+    Health check endpoint for monitoring services.
+    """
+    return {"status": "ok"}
